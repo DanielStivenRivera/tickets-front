@@ -1,0 +1,58 @@
+<div class="h-full bg-gray-900 flex items-center justify-center py-12 px-4 sm:px6 lg:8">
+  <div class="max-w-md w-full space-y-8 bg-gray-800 p-10 rounded-lg shadow-xl">
+    <div>
+      <h2 class="text-center text-3xl font-extrabold text-white">
+        Registrarse
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-400">
+        ¿Ya tienes una cuenta?
+        <button (click)="changeSection.emit('login')" class="font-medium cursor-pointer text-blue-400 hover:text-blue-300">Iniciar Sesión</button>
+      </p>
+    </div>
+    <form class="mt-2 pt-2 space-y-6" autocomplete="off" [formGroup]="registerForm">
+      <mat-form-field class="w-full">
+        <mat-label>Nombres y apellidos</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput formControlName="email">
+        @if (registerForm.get('email').touched && registerForm.get('email').invalid && registerForm.get('email').errors['email']) {
+          <mat-error>Correo electrónico invalido</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Contraseña</mat-label>
+        <input
+          class="hide-password-toggle"
+          autocomplete="new-password"
+          formControlName="password"
+          matInput [type]="hide() ? 'password' : 'text'">
+        <button mat-icon-button
+                matSuffix
+                (click)="changePasswordVisibility($event)"
+                [attr.aria-label]="'Hide password'"
+                type="button"
+                [attr.aria-pressed]="hide()">
+          <mat-icon class="text-gray-700" [class]="registerForm.get('password')?.invalid && registerForm.get('password').touched ? 'error-text' : 'white-text'">{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        @if (registerForm.get('password').touched && registerForm.get('password').invalid && registerForm.get('password').errors['pattern']) {
+          <mat-error>Debe contener una mayúscula, una minúscula, un número, mínimo 8 caracteres y sin caracteres especiales</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Compañia</mat-label>
+        <mat-select formControlName="companyId">
+          @for (company of companies; track company.id) {
+            <mat-option [value]="company.id">{{company.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button type="submit"
+              (click)="register()"
+              class=" group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-blue-500">
+        Registrar
+      </button>
+    </form>
+  </div>
+</div>
