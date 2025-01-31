@@ -1,0 +1,12 @@
+@if (section() === 'login') {
+  @defer {
+    <app-login (changeSection)="changeSection($event)"></app-login>
+  }
+}
+
+@if (section() === 'register') {
+  @defer {
+    <app-register (changeSection)="changeSection($event)"></app-register>
+  }
+}
+

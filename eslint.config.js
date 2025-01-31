@@ -34,7 +34,7 @@ module.exports = tseslint.config(
       "@typescript-eslint/explicit-module-boundary-types": "error",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-non-null-assertion": "error",
-      "no-console": "warn",
+      "no-console": ["warn", {"allow": ["error"]}],
       "prefer-const": "error",
       "no-magic-numbers": ["warn", { "ignore": [0, 1] }],
       "consistent-return": "error",
@@ -47,7 +47,7 @@ module.exports = tseslint.config(
       "quotes": ["error", "single"],
       "semi": ["error", "always"],
       "indent": ["error", 2],
-      "max-len": ["error", { "code": 100 }],
+      "max-len": ["error", { "code": 200 }],
     },
   },
   {
@@ -57,7 +57,7 @@ module.exports = tseslint.config(
       ...angular.configs.templateAccessibility,
     ],
     rules: {
-      "max-len": ["error", { "code": 100 }],
+      "max-len": ["error", { "code": 300 }],
     },
   }
 );
