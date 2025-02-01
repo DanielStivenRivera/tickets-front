@@ -32,7 +32,6 @@ module.exports = tseslint.config(
       ],
       "@typescript-eslint/no-unused-vars": ["error"],
       "@typescript-eslint/explicit-module-boundary-types": "error",
-      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-non-null-assertion": "error",
       "no-console": ["warn", {"allow": ["error"]}],
       "prefer-const": "error",
