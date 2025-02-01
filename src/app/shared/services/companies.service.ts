@@ -9,17 +9,24 @@ import {Company} from '../types/companies.interface';
 })
 export class CompaniesService {
 
-  private _companies: Company[] = [];
+  private _companies: Company[];
 
   constructor(
     private readonly http: HttpClient,
   ) { }
 
   async getCompanies(): Promise<Company[]> {
-    if (this._companies.length === 0) {
+    if (!this._companies) {
       this._companies = await lastValueFrom(this.http.get<Company[]>(`${environment.apiUrl}/companies`));
     }
     return this._companies;
+  }
+
+  async getCompanyId(id: number): Promise<Company> {
+    if (!this._companies) {
+      await this.getCompanies();
+    }
+    return this._companies.find(item => item.id === id);
   }
 
 }

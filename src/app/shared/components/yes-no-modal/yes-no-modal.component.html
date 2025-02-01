@@ -1,0 +1,22 @@
+<div class="container bg-slate-800 rounded-xl flex flex-col w-full p-4">
+  <div class="w-full flex justify-between items-center">
+    <h2 class="text-blue-500 font-semibold text-xl w-fit h-fit">{{data.title}}</h2>
+    <button
+      mat-icon-button
+      (click)="emitOption('not')"
+    ><mat-icon class="white-text">close</mat-icon></button>
+  </div>
+  <p class="font-medium text-lg text-gray-100 mb-4">{{data.message}}</p>
+  <div class="w-60 flex justify-between ml-auto mr-auto">
+    <button type="submit"
+            (click)="emitOption('not')"
+            class=" group mb-4 relative w-fit cursor-pointer flex justify-center py-2 px-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-blue-500">
+      No
+    </button>
+    <button type="submit"
+            (click)="emitOption('yes')"
+            class=" group mb-4 relative w-fit cursor-pointer flex justify-center py-2 px-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-blue-500">
+      Si
+    </button>
+  </div>
+</div>

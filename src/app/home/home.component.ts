@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit, signal} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import {AuthService} from '../shared/services/auth.service';
+import {UserData} from '../shared/types/user-data.interface';
+import {ProfileService} from '../shared/services/profile.service';
+import {LoadingService} from '../shared/services/loading.service';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +20,29 @@ import {AuthService} from '../shared/services/auth.service';
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+
+  userData = signal<UserData | undefined>(undefined);
 
   constructor(
     private readonly authService: AuthService,
+    private readonly profileService: ProfileService,
+    private loadingService: LoadingService,
   ) {
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.loadingService.setLoading(true);
+    await this.getProfileData();
+    this.loadingService.setLoading(false);
+  }
+
+  async getProfileData(): Promise<void> {
+    try {
+      this.userData.set(await this.profileService.getProfileData());
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async logout(): Promise<void> {

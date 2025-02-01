@@ -1,3 +1,8 @@
 <div class="w-screen h-screen bg-slate-900">
   <router-outlet></router-outlet>
 </div>
+@if(loadingService.loading()) {
+  <div class="flex fixed top-0 left-0 bg-gray-700/60 w-full h-full justify-center items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+}

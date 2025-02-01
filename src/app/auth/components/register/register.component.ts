@@ -10,6 +10,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
+import {LoadingService} from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-register',
@@ -42,12 +43,15 @@ export class RegisterComponent implements OnInit {
     private readonly toastService: ToastrService,
     private readonly authService: AuthService,
     private readonly router: Router,
+    private loadingService: LoadingService,
   ) {
     this.initializeForm();
   }
 
   async ngOnInit(): Promise<void> {
+    this.loadingService.setLoading(true);
     await this.getCompanies();
+    this.loadingService.setLoading(false);
   }
 
   async getCompanies(): Promise<void> {
@@ -75,6 +79,7 @@ export class RegisterComponent implements OnInit {
       this.toastService.error('Valide la información del formulario');
       return;
     }
+    this.loadingService.setLoading(true);
     try {
       await this.authService.register(this.registerForm.value);
       await this.router.navigateByUrl('/home');
@@ -84,6 +89,7 @@ export class RegisterComponent implements OnInit {
       }
       console.error(e);
     }
+    this.loadingService.setLoading(false);
   }
 
 
