@@ -1,52 +1,69 @@
 import { TestBed } from '@angular/core/testing';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { provideExperimentalZonelessChangeDetection } from '@angular/core';
 import { CompaniesService } from './companies.service';
-import {provideExperimentalZonelessChangeDetection} from '@angular/core';
-import {Company} from '../types/companies.interface';
+import { HttpClient } from '@angular/common/http';
+import { of } from 'rxjs';
 import {environment} from '../../../environments/environment';
-import {BrowserDynamicTestingModule} from '@angular/platform-browser-dynamic/testing';
 
 describe('CompaniesService', () => {
   let service: CompaniesService;
-  let httpMock: HttpTestingController;
+  let httpClientSpy: { get: jasmine.Spy };
 
   beforeEach(() => {
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+
     TestBed.configureTestingModule({
       providers: [
         provideExperimentalZonelessChangeDetection(),
+        { provide: HttpClient, useValue: httpClientSpy }
       ],
-      imports: [BrowserDynamicTestingModule, HttpClientTestingModule]
     });
 
     service = TestBed.inject(CompaniesService);
-    httpMock = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => {
-    httpMock.verify();
+  describe('Initialization', () => {
+    it('should be created', () => {
+      expect(service).toBeTruthy();
+    });
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+  describe('getCompanies', () => {
+    it('should fetch companies from API if not cached', async () => {
+      const mockCompanies = [{ id: 1, name: 'Company A' }, { id: 2, name: 'Company B' }];
+      httpClientSpy.get.and.returnValue(of(mockCompanies));
 
-  it('should fetch companies from API if not cached', async () => {
-    const mockCompanies: Company[] = [{ id: 1, name: 'Test Company' } as Company];
-
-    service.getCompanies().then(companies => {
-      expect(companies).toEqual(mockCompanies);
+      const companies = await service.getCompanies();
+      expect(companies).toEqual(mockCompanies as any);
+      expect(httpClientSpy.get).toHaveBeenCalledWith(`${environment.apiUrl}/companies`);
     });
 
-    const req = httpMock.expectOne(`${environment.apiUrl}/companies`);
-    expect(req.request.method).toBe('GET');
-    req.flush(mockCompanies);
+    it('should return cached companies if already fetched', async () => {
+      const mockCompanies = [{ id: 1, name: 'Company A' }];
+      service['_companies'] = mockCompanies as any;
+
+      const companies = await service.getCompanies();
+      expect(companies).toEqual(mockCompanies as any);
+      expect(httpClientSpy.get).not.toHaveBeenCalled();
+    });
   });
 
-  it('should return cached companies if already fetched', async () => {
-    const mockCompanies: Company[] = [{ id: 1, name: 'Test Company' } as Company];
-    service['_companies'] = mockCompanies;
+  describe('getCompanyId', () => {
+    it('should return a specific company by ID', async () => {
+      const mockCompanies = [{ id: 1, name: 'Company A' }, { id: 2, name: 'Company B' }];
+      service['_companies'] = mockCompanies as any;
 
-    const companies = await service.getCompanies();
-    expect(companies).toEqual(mockCompanies);
+      const company = await service.getCompanyId(1);
+      expect(company).toEqual(mockCompanies[0] as any);
+    });
+
+    it('should fetch companies if not cached before searching', async () => {
+      const mockCompanies = [{ id: 1, name: 'Company A' }];
+      httpClientSpy.get.and.returnValue(of(mockCompanies));
+
+      const company = await service.getCompanyId(1);
+      expect(company).toEqual(mockCompanies[0] as any);
+      expect(httpClientSpy.get).toHaveBeenCalledWith(`${environment.apiUrl}/companies`);
+    });
   });
 });

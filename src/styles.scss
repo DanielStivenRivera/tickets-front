@@ -4,7 +4,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @use 'ngx-toastr/toastr';
-@use "tailwindcss";
+@import "tailwindcss";
 
 html {
   @include mat.theme((
@@ -20,6 +20,8 @@ html {
 
 $error-color: #ff6c6c;
 
+$transparent: rgba(236, 236, 236, 0);
+
 .error-text {
   color: $error-color;
 }
@@ -32,7 +34,7 @@ $error-color: #ff6c6c;
 
 :root {
   @include mat.form-field-overrides((
-    filled-container-color: rgba(236, 236, 236, 0),
+    filled-container-color: $transparent,
     filled-label-text-color: white,
     filled-active-indicator-color: white,
     filled-hover-active-indicator-color: #6ab3ff,
@@ -57,7 +59,13 @@ $error-color: #ff6c6c;
     placeholder-text-color: white,
     invalid-arrow-color: $error-color,
     enabled-arrow-color: white,
-  ))
+  ));
+  @include mat.dialog-overrides((
+    container-color: $transparent,
+  ));
+  @include mat.progress-spinner-overrides((
+    active-indicator-color: #6ab3ff
+  ));
 }
 
 body {

@@ -8,6 +8,7 @@ import {LocalStorageService} from '../../../shared/services/local-storage.servic
 import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
+import {LoadingService} from '../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -48,6 +49,7 @@ export class LoginComponent {
     private readonly fb: FormBuilder,
     private readonly router: Router,
     private toastService: ToastrService,
+    private loadingService: LoadingService,
   ) {
     this.initializeForm();
   }
@@ -59,6 +61,7 @@ export class LoginComponent {
       this.toastService.error('Validar los campos que contienen errores');
       return;
     }
+    this.loadingService.setLoading(true);
     try {
       await this.authService.login(this.loginForm.value);
       if (this.localStorageService.itemExists('token')) {
@@ -70,6 +73,8 @@ export class LoginComponent {
         this.toastService.error('Credenciales no validas');
       }
     }
+    this.loadingService.setLoading(false);
+
   }
 
   private initializeForm(): void {
