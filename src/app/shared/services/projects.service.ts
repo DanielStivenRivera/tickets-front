@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {CreateProject, Project} from '../types/project.interface';
 import {lastValueFrom} from 'rxjs';
 import {environment} from '../../../environments/environment';
@@ -14,8 +14,10 @@ export class ProjectsService {
     private http: HttpClient,
   ) { }
 
-  getProjects(): Promise<Project[]> {
-    return lastValueFrom(this.http.get<Project[]>(`${environment.apiUrl}/projects`));
+  getProjects(companyId: number): Promise<Project[]> {
+    const params = new HttpParams()
+      .set('companyId', companyId);
+    return lastValueFrom(this.http.get<Project[]>(`${environment.apiUrl}/projects`, {params}));
   }
 
   async createProject(body: CreateProject): Promise<void> {
@@ -28,6 +30,10 @@ export class ProjectsService {
 
   async deleteProject(id: number): Promise<void> {
     await lastValueFrom(this.http.delete(`${environment.apiUrl}/projects/${id}`));
+  }
+
+  getProjectById(id: number): Promise<Project> {
+    return lastValueFrom(this.http.get<Project>(`${environment.apiUrl}/projects/${id}`));
   }
 
 }

@@ -9,24 +9,27 @@ import {Company} from '../types/companies.interface';
 })
 export class CompaniesService {
 
-  private _companies: Company[];
+
+  private _selectedCompany: Company;
+
+  get selectedCompany (): Company {
+    return this._selectedCompany;
+  }
 
   constructor(
     private readonly http: HttpClient,
   ) { }
 
   async getCompanies(): Promise<Company[]> {
-    if (!this._companies) {
-      this._companies = await lastValueFrom(this.http.get<Company[]>(`${environment.apiUrl}/companies`));
-    }
-    return this._companies;
+    return  lastValueFrom(this.http.get<Company[]>(`${environment.apiUrl}/companies`));
   }
 
   async getCompanyId(id: number): Promise<Company> {
-    if (!this._companies) {
-      await this.getCompanies();
-    }
-    return this._companies.find(item => item.id === id);
+    return lastValueFrom(this.http.get<Company>(`${environment.apiUrl}/companies/${id}`));
+  }
+
+  selectCompany(company: Company) {
+    this._selectedCompany = company;
   }
 
 }

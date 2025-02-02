@@ -7,6 +7,7 @@ import {AuthService} from '../shared/services/auth.service';
 import {UserData} from '../shared/types/user-data.interface';
 import {ProfileService} from '../shared/services/profile.service';
 import {LoadingService} from '../shared/services/loading.service';
+import {CompaniesService} from '../shared/services/companies.service';
 
 @Component({
   selector: 'app-home',
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly profileService: ProfileService,
     private loadingService: LoadingService,
+    public companiesService: CompaniesService,
   ) {
   }
 

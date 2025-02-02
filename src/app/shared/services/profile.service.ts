@@ -22,8 +22,6 @@ export class ProfileService {
     const payload = jwtDecode.jwtDecode<Payload>(token);
     this._userData = {
       name: payload.name,
-      company: (await this.companiesService.getCompanyId(payload.companyId))?.name ?? '',
-      companyId: payload.companyId,
     };
     return this._userData;
   }

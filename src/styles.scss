@@ -4,7 +4,7 @@
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @use 'ngx-toastr/toastr';
-@import "tailwindcss";
+@use "tailwindcss";
 
 html {
   @include mat.theme((
@@ -20,7 +20,7 @@ html {
 
 $error-color: #ff6c6c;
 
-$transparent: rgba(236, 236, 236, 0);
+$transparent: rgba(145, 145, 145, 0);
 
 .error-text {
   color: $error-color;
@@ -34,7 +34,7 @@ $transparent: rgba(236, 236, 236, 0);
 
 :root {
   @include mat.form-field-overrides((
-    filled-container-color: $transparent,
+    filled-container-color: #111926,
     filled-label-text-color: white,
     filled-active-indicator-color: white,
     filled-hover-active-indicator-color: #6ab3ff,
@@ -66,6 +66,13 @@ $transparent: rgba(236, 236, 236, 0);
   @include mat.progress-spinner-overrides((
     active-indicator-color: #6ab3ff
   ));
+  @include mat.expansion-overrides((
+    container-background-color: #243659,
+    header-indicator-color: white,
+  ));
+  @include mat.divider-overrides((
+    color: #6ab3ff
+  ))
 }
 
 body {
@@ -76,6 +83,39 @@ body {
 }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+html {
+  overflow: hidden;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.overflow-y-hidden {
+  overflow-y: hidden;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
+}
+
+.hide-scrollbar {
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+.max-content {
+  height: calc(100vh - 73px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 ::ng-deep .mat-mdc-form-field {
   width: 100%!important;
@@ -86,7 +126,6 @@ input[type="password"]::-ms-clear {
   display: none;
 }
 
-/* Para navegadores basados en Chrome/Chromium */
 input[type="password"]::-webkit-contacts-auto-fill-button,
 input[type="password"]::-webkit-credentials-auto-fill-button {
   display: none !important;

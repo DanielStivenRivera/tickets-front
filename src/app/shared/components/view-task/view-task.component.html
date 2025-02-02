@@ -1,0 +1,99 @@
+<div class="container bg-slate-800 rounded-xl flex flex-col w-full h-full p-4">
+  @if (isEditing()) {
+    <form class="mt-2" [formGroup]="taskForm">
+      <mat-form-field class="w-full">
+        <mat-label>Titulo</mat-label>
+        <input matInput formControlName="title">
+      </mat-form-field>
+      <mat-form-field class="w-full">
+        <mat-label>Descripción</mat-label>
+        <textarea formControlName="description"
+                  matInput [maxlength]="120" class="resize-none" style="resize: none;"></textarea>
+      </mat-form-field>
+      <div class="w-60 flex justify-between ml-auto mr-auto">
+        <button type="button"
+                (click)="cancel()"
+                class=" group mb-4 relative w-fit cursor-pointer flex justify-center py-2 px-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-blue-500">
+          Cancelar
+        </button>
+        <button type="submit"
+                (click)="save()"
+                class=" group mb-4 relative w-fit cursor-pointer flex justify-center py-2 px-4 border border-transparent text-lg font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-blue-500">
+          Guardar
+        </button>
+      </div>
+    </form>
+  } @else
+  {
+    <div>
+      <div class="flex flex-row justify-between items-center">
+        <div class="flex flex-col">
+          <h3 class="mt-4 mb-4 text-blue-500 font-serif font-black text-2xl">Titulo</h3>
+          <p class="mb-4 text-gray-300 font-serif text-lg">{{data.title}}</p>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-select [formControl]="taskStatusControl" (selectionChange)="updateStatus($event)">
+              @for (option of statusArray; track option.status) {
+                @if (option.status !== data.status) {
+                  <mat-option [value]="option.status">{{option.text}}</mat-option>
+                } @else {
+                  <mat-option class="hidden" [value]="option.status">{{option.text}}</mat-option>
+                }
+              }
+            </mat-select>
+          </mat-form-field>
+          <button
+            (click)="isEditing.set(!isEditing())"
+            matTooltip="Editar tarea"
+            mat-icon-button><mat-icon class="white-text text-lg">edit</mat-icon></button>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <div class="flex flex-col h-[120px]">
+        <h3 class="mt-4 text-lg font-serif font-black text-blue-500">Descripción</h3>
+        <p class=" mt-4 font-sans text-white">{{data.description}}</p>
+      </div>
+      <mat-divider></mat-divider>
+    </div>
+  }
+  <div class="overflow-x-hidden overflow-y-auto pr-1 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700
+  dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 p-4 bg-gradient-to-b from-slate-800 to-slate-900 max-content [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full">
+
+    <h4 class="mt-2 mb-2 text-gray-200 text-lg">Comentarios</h4>
+    <mat-divider></mat-divider>
+    <div class="relative">
+      <mat-form-field class="w-full">
+        <textarea matInput rows="4" style="resize: none" [formControl]="commentControl"></textarea>
+      </mat-form-field>
+      <button
+        (click)="commentTask()"
+        class="right-0 bottom-8" style="position: absolute"
+        mat-icon-button><mat-icon class="white-text">send</mat-icon></button>
+    </div>
+    <div>
+      <div class="min-h-full">
+        @for (log of taskLogs() ; track log.id) {
+          @if(log.eventType === eventType.COMMENT) {
+            <div class="mb-2 mt-2">
+              <p class="text-blue-400 font-semibold ">Comentario</p>
+              <p class="text-gray-300 ">{{log.comment}}</p>
+              <p class="text-sm mb-2 font-sans font-light text-gray-300">{{log.createdAt | date: 'dd/MM/YYYY hh:mm:ss'}}</p>
+            </div>
+          } @else {
+            <div class="flex flex-col mt-2">
+              <p class=" text-blue-400 font-semibold">Cambio de estado</p>
+              <div class="flex items-center mb-2">
+                <p class="text-red-400 ">{{log.statusChange.previous === 'TODO' ? 'Por hacer' : log.statusChange.previous === 'IN_PROGRESS' ? 'En progreso' : 'Finalizado'}}</p>
+                <mat-icon class="white-text">arrow_right_alt</mat-icon>
+                <p class="text-green-300">{{log.statusChange.current === 'TODO' ? 'Por hacer' : log.statusChange.current === 'IN_PROGRESS' ? 'En progreso' : 'Finalizado'}}</p>
+              </div>
+              <p class="text-sm mb-2 font-sans font-light text-gray-300">{{log.createdAt | date: 'dd/MM/YYYY hh:mm:ss' }}</p>
+            </div>
+          }
+          <mat-divider></mat-divider>
+        }
+      </div>
+    </div>
+  </div>
+</div>
