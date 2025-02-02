@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --no-hmr",
-    "build": "ng build",
+    "build": "init-env && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "init-env": "node load-env.js"
   },
   "private": true,
   "dependencies": {
