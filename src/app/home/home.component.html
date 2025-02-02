@@ -1,4 +1,4 @@
-<div class="w-full min-h-screen grid grid-rows-[auto_1fr] bg-slate-950">
+<div class="w-full min-h-screen grid grid-rows-[auto_1fr] bg-slate-950 overflow-hidden">
   <header class="w-full flex bg-slate-900 border-b border-b-blue-500/50 px-4 py-2 justify-between items-center shadow-lg">
     <a href="/home" class="font-bold text-xl text-blue-500 hover:text-blue-400 transition-colors duration-200 flex items-center gap-2">
       TICKETS SERVER
@@ -6,12 +6,14 @@
     @if(userData()) {
       <button
         [matMenuTriggerFor]="menu"
-        class="flex items-center gap-2 cursor-pointer bg-slate-700/50 p-2 rounded-lg shadow-md hover:bg-slate-700 active:bg-slate-600 transition-all duration-200">
+        class="flex items-center gap-2 cursor-pointer min-h-[56px] bg-slate-700/50 p-2 rounded-lg shadow-md hover:bg-slate-700 active:bg-slate-600 transition-all duration-200">
         <div class="flex flex-col justify-center text-center">
           <span class="text-base font-semibold text-gray-100">{{userData().name}}</span>
-          <span class="text-xs text-gray-400">{{userData().company}}</span>
+          @if (companiesService.selectedCompany) {
+            <span class="text-xs text-gray-400">{{companiesService.selectedCompany.name}}</span>
+          }
         </div>
-        <mat-icon class="text-blue-400">account_circle</mat-icon>
+        <mat-icon class="white-text">account_circle</mat-icon>
       </button>
     }
     <mat-menu #menu="matMenu">
@@ -21,7 +23,11 @@
       </button>
     </mat-menu>
   </header>
-  <div class="h-full p-4 bg-gradient-to-b from-slate-800 to-slate-900">
-    <router-outlet></router-outlet>
+  <div class="max-content">
+    <div class="[&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+    dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500 p-4 bg-gradient-to-b from-slate-800
+    to-slate-900 max-content [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:rounded-full">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 </div>

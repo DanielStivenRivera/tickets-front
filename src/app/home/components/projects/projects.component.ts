@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 import {DialogService} from '../../../shared/services/dialog.service';
 import {ProfileService} from '../../../shared/services/profile.service';
 import {LoadingService} from '../../../shared/services/loading.service';
+import {CompaniesService} from '../../../shared/services/companies.service';
 
 @Component({
   selector: 'app-projects',
@@ -30,8 +31,8 @@ export class ProjectsComponent implements OnInit {
     private readonly projectService: ProjectsService,
     private readonly router: Router,
     private readonly dialogService: DialogService,
-    private readonly profileService: ProfileService,
     private loadingService: LoadingService,
+    private readonly companiesService: CompaniesService,
   ) {
   }
 
@@ -43,7 +44,7 @@ export class ProjectsComponent implements OnInit {
 
   async getProjects(): Promise<void> {
     try {
-      const projects = await this.projectService.getProjects();
+      const projects = await this.projectService.getProjects(this.companiesService.selectedCompany.id);
       this.projects.set(projects);
     } catch (e) {
       console.error(e);
@@ -51,7 +52,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   async openProject(id: number): Promise<void> {
-    await this.router.navigateByUrl(`/home/project/${id}`);
+    await this.router.navigateByUrl(`/home/projects/${id}`);
   }
 
   async createProject(): Promise<void> {
@@ -60,7 +61,7 @@ export class ProjectsComponent implements OnInit {
       return;
     this.loadingService.setLoading(true);
     try {
-      await this.projectService.createProject({...resp, companyId: (await this.profileService.getProfileData()).companyId});
+      await this.projectService.createProject({...resp, companyId: this.companiesService.selectedCompany.id});
       await this.getProjects();
     } catch (e) {
       console.error(e);
@@ -84,7 +85,7 @@ export class ProjectsComponent implements OnInit {
 
   async deleteProject(project: Project): Promise<void> {
     const resp = await this.dialogService.openYesNoModal('Eliminar proyecto', `Está seguro de eliminar el proyecto <<${project.title}>>?, esta acción es irreversible.`);
-    if (resp === 'no')
+    if (resp === 'not')
       return;
     this.loadingService.setLoading(true);
     try {

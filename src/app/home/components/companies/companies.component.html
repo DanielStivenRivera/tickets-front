@@ -1,0 +1,12 @@
+<div class="h-full flex gap-2 flex-wrap">
+  @for (company of companies(); track company.id) {
+    <button
+      (click)="selectCompany(company)"
+      class="max-h-fit p-4 bg-slate-900 cursor-pointer shadow-lg">
+      <h2 class="white-text">{{company.name}}</h2>
+      <p class="white-text">{{company.nit}}</p>
+      <p class="white-text">{{company.email}}</p>
+      <p class="white-text">{{company.address}}</p>
+    </button>
+  }
+</div>

@@ -13,7 +13,7 @@
     </mat-form-field>
     <mat-form-field class="w-full">
       <mat-label>Descripción</mat-label>
-      <input matInput formControlName="description">
+      <textarea formControlName="description" matInput [maxlength]="120" class="resize-none" style="resize: none;"></textarea>
     </mat-form-field>
     <div class="w-60 flex justify-between ml-auto mr-auto">
       <button type="button"

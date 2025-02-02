@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, signal} from '@angular/core';
 import {CompaniesService} from '../../../shared/services/companies.service';
-import {Company} from '../../../shared/types/companies.interface';
 import {ToastrService} from 'ngx-toastr';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
@@ -27,12 +26,10 @@ import {LoadingService} from '../../../shared/services/loading.service';
   styleUrl: './register.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   @Output()
     changeSection: EventEmitter<'login'> = new EventEmitter<'login'>();
-
-  companies: Company[] = [];
 
   registerForm: FormGroup;
 
@@ -48,15 +45,9 @@ export class RegisterComponent implements OnInit {
     this.initializeForm();
   }
 
-  async ngOnInit(): Promise<void> {
-    this.loadingService.setLoading(true);
-    await this.getCompanies();
-    this.loadingService.setLoading(false);
-  }
 
   async getCompanies(): Promise<void> {
     try {
-      this.companies = await this.companiesService.getCompanies();
     } catch (e) {
       console.error(e);
       this.toastService.error('No se pudo obtener la lista de compañias');
@@ -68,7 +59,6 @@ export class RegisterComponent implements OnInit {
       name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.pattern('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])[A-Za-z\\d]{8,}$')]),
-      companyId: new FormControl('', [Validators.required])
     });
   }
 
