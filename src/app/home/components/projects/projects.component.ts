@@ -7,7 +7,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {Router} from '@angular/router';
 import {DialogService} from '../../../shared/services/dialog.service';
-import {ProfileService} from '../../../shared/services/profile.service';
 import {LoadingService} from '../../../shared/services/loading.service';
 import {CompaniesService} from '../../../shared/services/companies.service';
 
@@ -32,7 +31,7 @@ export class ProjectsComponent implements OnInit {
     private readonly router: Router,
     private readonly dialogService: DialogService,
     private loadingService: LoadingService,
-    private readonly companiesService: CompaniesService,
+    public readonly companiesService: CompaniesService,
   ) {
   }
 
@@ -95,6 +94,10 @@ export class ProjectsComponent implements OnInit {
       console.error(e);
     }
     this.loadingService.setLoading(false);
+  }
+
+  async goBack(): Promise<void> {
+    await this.router.navigateByUrl('home');
   }
 
 }

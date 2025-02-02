@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit {
 
   async logout(): Promise<void> {
     await this.authService.logout();
+    delete this.companiesService._selectedCompany;
   }
 
 }

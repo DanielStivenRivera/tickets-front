@@ -188,4 +188,8 @@ export class UserHistoriesComponent implements OnInit {
     this.loadingService.setLoading(false);
   }
 
+  async goBack(): Promise<void> {
+    await this.router.navigateByUrl('home/projects');
+  }
+
 }

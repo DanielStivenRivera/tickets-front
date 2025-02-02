@@ -1,4 +1,8 @@
 <div class="flex flex-col w-full overflow-x-hidden">
+  <button
+    (click)="goBack()"
+    matTooltip="Ir a proyectos"
+    mat-icon-button><mat-icon class="white-text">keyboard_arrow_left</mat-icon></button>
   <div class="w-full flex flex-row item-center justify-between mb-4">
     @if (projectData()) {
       <h2 class="font-bold text-2xl text-blue-500">{{projectData().title}}</h2>

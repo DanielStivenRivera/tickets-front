@@ -10,7 +10,7 @@ import {Company} from '../types/companies.interface';
 export class CompaniesService {
 
 
-  private _selectedCompany: Company;
+  _selectedCompany: Company;
 
   get selectedCompany (): Company {
     return this._selectedCompany;
